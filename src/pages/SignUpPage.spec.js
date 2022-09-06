@@ -106,5 +106,18 @@ describe("Sign Up Page", () => {
       server.close();
       expect(count).toBe(1);
     });
+    it("displays spinner while the api request in progress", async () => {
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          return res(ctx.status(200));
+        })
+      );
+      server.listen();
+      await setup();
+      const button = screen.queryByRole("button", { name: "Sign Up" });
+      await userEvent.click(button);
+      const spinner = screen.queryByRole("status");
+      expect(spinner).toBeInTheDocument();
+    });
   });
 });

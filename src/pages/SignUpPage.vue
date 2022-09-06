@@ -42,6 +42,7 @@
             :disabled="btnDisabled || disabled"
             @click.prevent="submit"
           >
+            <span class="spinner-border spinner-border-sm" role="status"></span>
             Sign Up
           </button>
         </div>
