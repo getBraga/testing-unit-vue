@@ -1,17 +1,15 @@
 <template>
-
-  <SignUpPage />
+  <div class="container"><SignUpPage /></div>
 </template>
 
 <script>
-
-import SignUpPage from './pages/SignUpPage.vue'
+import SignUpPage from "./pages/SignUpPage.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    SignUpPage
-  }
-}
+    SignUpPage,
+  },
+};
 </script>
 
 <style>
@@ -19,8 +17,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
