@@ -39,7 +39,7 @@
         <div class="text-center">
           <button
             class="btn btn-primary"
-            :disabled="btnDisabled"
+            :disabled="btnDisabled || disabled"
             @click.prevent="submit"
           >
             Sign Up
@@ -55,6 +55,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      disabled: false,
       username: "",
       email: "",
       password: "",
@@ -70,6 +71,7 @@ export default {
   },
   methods: {
     submit() {
+      this.disabled = true;
       axios.post("/api/1.0/users", {
         username: this.username,
         email: this.email,
