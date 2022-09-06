@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-side-effects-in-computed-properties -->
 <template>
   <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
-    <form class="card mt-5">
+    <form class="card mt-5" data-testid="form-sign-up" v-if="!signUpSuccess">
       <div class="card-header">
         <h1 class="text-center">Sign Up</h1>
       </div>
@@ -45,6 +45,7 @@
             <span
               v-if="apiProgress"
               class="spinner-border spinner-border-sm"
+              data-testid="status"
               role="status"
             ></span>
             Sign Up
@@ -52,7 +53,7 @@
         </div>
       </div>
     </form>
-    <div v-if="signUpSucces" class="alert alert-success mt-2">
+    <div v-else class="alert alert-success mt-2">
       Please check your e-mail to activate your account
     </div>
   </div>
@@ -69,7 +70,7 @@ export default {
       password: "",
       passwordRepeat: "",
       apiProgress: false,
-      signUpSucces: false,
+      signUpSuccess: false,
     };
   },
   computed: {
@@ -89,9 +90,12 @@ export default {
           email: this.email,
           password: this.password,
         })
-        .then(() => {
-          this.signUpSucces = true;
-        });
+
+        .then(async () => {
+          await this.apiProgress;
+          this.signUpSuccess = true;
+        })
+        .catch(() => {});
     },
   },
 };
