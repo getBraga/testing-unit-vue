@@ -117,6 +117,7 @@ describe("Sign Up Page", () => {
       const button = screen.queryByRole("button", { name: "Sign Up" });
       await userEvent.click(button);
       const spinner = screen.queryByRole("status");
+      server.close();
       expect(spinner).toBeInTheDocument();
     });
     it("does not display spinner when there is no api request", async () => {
@@ -142,6 +143,24 @@ describe("Sign Up Page", () => {
     });
     it("does not display account activation message before sign up request", async () => {
       await setup();
+      const text = screen.queryByText(
+        "Please check your e-mail to activate your account"
+      );
+
+      expect(text).not.toBeInTheDocument();
+    });
+    it("does not displays account activation information after failing sign up", async () => {
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          return res(ctx.status(400));
+        })
+      );
+
+      server.listen();
+      await setup();
+      const button = screen.queryByRole("button", { name: "Sign Up" });
+      await userEvent.click(button);
+      server.close();
       const text = screen.queryByText(
         "Please check your e-mail to activate your account"
       );
