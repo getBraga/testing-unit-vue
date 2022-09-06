@@ -52,6 +52,9 @@
         </div>
       </div>
     </form>
+    <div v-if="signUpSucces" class="alert alert-success mt-2">
+      Please check your e-mail to activate your account
+    </div>
   </div>
 </template>
 
@@ -66,6 +69,7 @@ export default {
       password: "",
       passwordRepeat: "",
       apiProgress: false,
+      signUpSucces: false,
     };
   },
   computed: {
@@ -79,11 +83,15 @@ export default {
     submit() {
       this.disabled = true;
       this.apiProgress = true;
-      axios.post("/api/1.0/users", {
-        username: this.username,
-        email: this.email,
-        password: this.password,
-      });
+      axios
+        .post("/api/1.0/users", {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+        })
+        .then(() => {
+          this.signUpSucces = true;
+        });
     },
   },
 };
