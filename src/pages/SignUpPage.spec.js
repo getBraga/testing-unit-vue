@@ -124,5 +124,28 @@ describe("Sign Up Page", () => {
       const spinner = screen.queryByRole("role");
       expect(spinner).not.toBeInTheDocument();
     });
+    it("displays account activation information after successful sign up request", async () => {
+      const server = setupServer(
+        rest.post("/api/1.0/users", async (req, res, ctx) => {
+          return res(ctx.status(200));
+        })
+      );
+      server.listen();
+      await setup();
+      const button = screen.queryByRole("button", { name: "Sign Up" });
+      await userEvent.click(button);
+      server.close();
+      const text = await screen.findByText(
+        "Please check your e-mail to activate your account"
+      );
+      expect(text).toBeInTheDocument();
+    });
+    it("does not display account activation message before sign up request", async () => {
+      await setup();
+      const text = screen.queryByText(
+        "Please check your e-mail to activate your account"
+      );
+      expect(text).not.toBeInTheDocument();
+    });
   });
 });
