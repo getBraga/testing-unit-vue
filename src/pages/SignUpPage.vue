@@ -42,7 +42,11 @@
             :disabled="btnDisabled || disabled"
             @click.prevent="submit"
           >
-            <span class="spinner-border spinner-border-sm" role="status"></span>
+            <span
+              v-if="apiProgress"
+              class="spinner-border spinner-border-sm"
+              role="status"
+            ></span>
             Sign Up
           </button>
         </div>
@@ -61,6 +65,7 @@ export default {
       email: "",
       password: "",
       passwordRepeat: "",
+      apiProgress: false,
     };
   },
   computed: {
@@ -73,6 +78,7 @@ export default {
   methods: {
     submit() {
       this.disabled = true;
+      this.apiProgress = true;
       axios.post("/api/1.0/users", {
         username: this.username,
         email: this.email,
