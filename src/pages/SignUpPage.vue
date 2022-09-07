@@ -61,6 +61,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   data() {
     return {
@@ -91,9 +92,10 @@ export default {
           password: this.password,
         })
 
-        .then(async () => {
-          await this.apiProgress;
-          this.signUpSuccess = true;
+        .then(() => {
+          setTimeout(() => {
+            this.signUpSuccess = true;
+          }, 0);
         })
         .catch(() => {});
     },
