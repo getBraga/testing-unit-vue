@@ -103,6 +103,7 @@ export default {
           if (error.response.status === 400) {
             this.errors = error.response.data.validationErrors;
           }
+          this.apiProgress = false;
         });
     },
   },
