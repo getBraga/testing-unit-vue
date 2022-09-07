@@ -40,7 +40,7 @@
         <div class="text-center">
           <button
             class="btn btn-primary"
-            :disabled="btnDisabled || disabled"
+            :disabled="btnDisabled || apiProgress"
             @click.prevent="submit"
           >
             <span
@@ -66,7 +66,6 @@ import axios from "axios";
 export default {
   data() {
     return {
-      disabled: false,
       username: "",
       email: "",
       password: "",
@@ -85,7 +84,6 @@ export default {
   },
   methods: {
     submit() {
-      this.disabled = true;
       this.apiProgress = true;
       axios
         .post("/api/1.0/users", {
