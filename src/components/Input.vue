@@ -3,6 +3,7 @@
     <div class="mb-3">
       <label :for="id" class="form-label">{{ label }}</label>
       <input
+        :type="type"
         class="form-control"
         :class="{ 'is-invalid': help }"
         :id="id"
@@ -23,6 +24,7 @@ export default {
     id: String,
     help: String,
     modelValue: String,
+    type: String,
   },
 };
 </script>
