@@ -55,7 +55,7 @@ describe("Sign Up Page", () => {
     });
   });
   describe("Interactions", () => {
-    let button, requestBody;
+    let button, requestBody, passwordInput, passwordInutRepeat;
     let count = 0;
     const server = setupServer(
       rest.post("/api/1.0/users", async (req, res, ctx) => {
@@ -75,8 +75,8 @@ describe("Sign Up Page", () => {
       render(SignUpPage);
       const usernameInput = screen.queryByLabelText("Username");
       const emailInput = screen.queryByLabelText("E-mail");
-      const passwordInput = screen.queryByLabelText("Password");
-      const passwordInutRepeat = screen.queryByLabelText("Password Repeat");
+      passwordInput = screen.queryByLabelText("Password");
+      passwordInutRepeat = screen.queryByLabelText("Password Repeat");
       button = screen.queryByRole("button", { name: "Sign Up" });
       await userEvent.type(usernameInput, "User1");
       await userEvent.type(emailInput, "user1@mail.com");
@@ -173,7 +173,7 @@ describe("Sign Up Page", () => {
       });
     });
 
-    fit.each`
+    it.each`
       field         | message
       ${"username"} | ${"Username cannot be null"}
       ${"email"}    | ${"E-mail cannot be null"}
@@ -204,6 +204,13 @@ describe("Sign Up Page", () => {
       userEvent.click(button);
       await screen.findByText("Username cannot be null");
       expect(button).toBeEnabled();
+    });
+    it("displays mismatch message for password repeat input", async () => {
+      await setup();
+      await userEvent.type(passwordInput, "P4ss1");
+      await userEvent.type(passwordInutRepeat, "P4ss2");
+      const text = await screen.findByText("Password mismatch");
+      expect(text).toBeInTheDocument();
     });
   });
 });

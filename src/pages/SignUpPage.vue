@@ -20,8 +20,14 @@
           :help="errors.password"
           v-model="password"
         />
-
-        <div class="mb-3">
+        <Input
+          id="password-repeat"
+          label="Password Repeat"
+          type="password"
+          v-model="passwordRepeat"
+          :help="hasPasswordMismatch ? 'Password mismatch' : ''"
+        />
+        <!-- <div class="mb-3">
           <label class="form-label" for="password-repeat"
             >Password Repeat</label
           >
@@ -32,7 +38,7 @@
             v-model="passwordRepeat"
             autocomplete="on"
           />
-        </div>
+        </div> -->
         <div class="text-center">
           <button
             class="btn btn-primary"
@@ -79,6 +85,9 @@ export default {
       return this.password.length && this.passwordRepeat.length
         ? this.password !== this.passwordRepeat
         : true;
+    },
+    hasPasswordMismatch() {
+      return this.password !== this.passwordRepeat;
     },
   },
   methods: {
