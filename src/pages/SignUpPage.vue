@@ -12,25 +12,15 @@
           :help="errors.username"
           v-model="username"
         />
-        <!-- <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input class="form-control" id="username" v-model="username" />
-          <span>{{ errors.username }}</span>
-        </div> -->
-        <div class="mb-3">
-          <label class="form-label" for="e-mail">E-mail</label>
-          <input class="form-control" id="e-mail" v-model="email" />
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="password">Password</label>
-          <input
-            class="form-control"
-            id="password"
-            type="password"
-            v-model="password"
-            autocomplete="on"
-          />
-        </div>
+        <Input id="email" label="E-mail" :help="errors.email" v-model="email" />
+        <Input
+          id="password"
+          label="Password"
+          type="password"
+          :help="errors.password"
+          v-model="password"
+        />
+
         <div class="mb-3">
           <label class="form-label" for="password-repeat"
             >Password Repeat</label
