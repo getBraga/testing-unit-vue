@@ -55,7 +55,7 @@ describe("Sign Up Page", () => {
     });
   });
   describe("Interactions", () => {
-    let button, requestBody, passwordInput, passwordInutRepeat;
+    let button, requestBody, passwordInput, passwordInutRepeat, usernameInput;
     let count = 0;
     const server = setupServer(
       rest.post("/api/1.0/users", async (req, res, ctx) => {
@@ -73,7 +73,7 @@ describe("Sign Up Page", () => {
     afterAll(() => server.close());
     const setup = async () => {
       render(SignUpPage);
-      const usernameInput = screen.queryByLabelText("Username");
+      usernameInput = screen.queryByLabelText("Username");
       const emailInput = screen.queryByLabelText("E-mail");
       passwordInput = screen.queryByLabelText("Password");
       passwordInutRepeat = screen.queryByLabelText("Password Repeat");
@@ -212,5 +212,22 @@ describe("Sign Up Page", () => {
       const text = await screen.findByText("Password mismatch");
       expect(text).toBeInTheDocument();
     });
+    it.each`
+      field         | message                      | label
+      ${"username"} | ${"Username cannot be null"} | ${"Username"}
+      ${"email"}    | ${"E-mail cannot be null"}   | ${"E-mail"}
+      ${"password"} | ${"Password cannot be null"} | ${"Password"}
+    `(
+      "clears validation error after field $field is updated",
+      async ({ field, message, label }) => {
+        server.use(generateValidationError(field, message));
+        await setup();
+        userEvent.click(button);
+        const text = await screen.findByText(message);
+        const input = screen.queryByLabelText(label);
+        await userEvent.type(input, "updated");
+        expect(text).not.toBeInTheDocument();
+      }
+    );
   });
 });

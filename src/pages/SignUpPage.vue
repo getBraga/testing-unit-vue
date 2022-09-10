@@ -27,18 +27,7 @@
           v-model="passwordRepeat"
           :help="hasPasswordMismatch ? 'Password mismatch' : ''"
         />
-        <!-- <div class="mb-3">
-          <label class="form-label" for="password-repeat"
-            >Password Repeat</label
-          >
-          <input
-            class="form-control"
-            id="password-repeat"
-            type="password"
-            v-model="passwordRepeat"
-            autocomplete="on"
-          />
-        </div> -->
+
         <div class="text-center">
           <button
             class="btn btn-primary"
@@ -88,6 +77,17 @@ export default {
     },
     hasPasswordMismatch() {
       return this.password !== this.passwordRepeat;
+    },
+  },
+  watch: {
+    username() {
+      delete this.errors.username;
+    },
+    email() {
+      delete this.errors.email;
+    },
+    password() {
+      delete this.errors.password;
     },
   },
   methods: {
