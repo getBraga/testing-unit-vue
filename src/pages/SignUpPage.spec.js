@@ -4,52 +4,59 @@ import { rest } from "msw";
 import { render, screen, waitFor } from "@testing-library/vue";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
-
+import i18n from "../locales/i18n";
 describe("Sign Up Page", () => {
   describe("Layout", () => {
+    const setup = () => {
+      render(SignUpPage, {
+        global: {
+          plugins: [i18n],
+        },
+      });
+    };
     it("has Sign Up Header", () => {
-      render(SignUpPage);
+      setup();
       const header = screen.queryByRole("heading", { name: "Sign Up" });
       expect(header).toBeInTheDocument();
     });
     it("has username input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByLabelText("Username");
       expect(input).toBeInTheDocument();
     });
 
     it("has email input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByLabelText("E-mail");
       expect(input).toBeInTheDocument();
     });
     it("has password input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByLabelText("Password");
       expect(input).toBeInTheDocument();
     });
     it("has password type for password input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByLabelText("Password");
       expect(input.type).toBe("password");
     });
     it("has password Repeat input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByLabelText("Password Repeat");
       expect(input).toBeInTheDocument();
     });
     it("has password Repeat type for password input", () => {
-      render(SignUpPage);
+      setup();
       const input = screen.queryByLabelText("Password Repeat");
       expect(input.type).toBe("password");
     });
     it("has Sign Up button", () => {
-      render(SignUpPage);
+      setup();
       const button = screen.queryByRole("button", { name: "Sign Up" });
       expect(button).toBeInTheDocument();
     });
     it("disables the button initially", () => {
-      render(SignUpPage);
+      setup();
       const button = screen.queryByRole("button", { name: "Sign Up" });
       expect(button).toBeDisabled();
     });
@@ -72,7 +79,11 @@ describe("Sign Up Page", () => {
     });
     afterAll(() => server.close());
     const setup = async () => {
-      render(SignUpPage);
+      render(SignUpPage, {
+        global: {
+          plugins: [i18n],
+        },
+      });
       usernameInput = screen.queryByLabelText("Username");
       const emailInput = screen.queryByLabelText("E-mail");
       passwordInput = screen.queryByLabelText("Password");
