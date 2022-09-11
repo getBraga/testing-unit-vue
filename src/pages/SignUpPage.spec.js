@@ -6,6 +6,7 @@ import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import i18n from "../locales/i18n";
 import en from "../locales/en.json";
+import tr from "../locales/tr.json";
 describe("Sign Up Page", () => {
   describe("Layout", () => {
     const setup = () => {
@@ -258,6 +259,23 @@ describe("Sign Up Page", () => {
       const password = screen.queryByLabelText(en.password);
       const passwordRepeat = screen.queryByLabelText(en.passwordRepeat);
       const button = screen.queryByRole("button", { name: en.signUp });
+      expect(signUp).toBeInTheDocument();
+      expect(username).toBeInTheDocument();
+      expect(email).toBeInTheDocument();
+      expect(password).toBeInTheDocument();
+      expect(passwordRepeat).toBeInTheDocument();
+      expect(button).toBeInTheDocument();
+    });
+    it("displays all text in Turkish after selecting that language", async () => {
+      setup();
+      const turkish = screen.queryByTitle("Türkçe");
+      await userEvent.click(turkish);
+      const signUp = screen.queryByRole("heading", { name: tr.signUp });
+      const username = screen.queryByLabelText(tr.username);
+      const email = screen.queryByLabelText(tr.email);
+      const password = screen.queryByLabelText(tr.password);
+      const passwordRepeat = screen.queryByLabelText(tr.passwordRepeat);
+      const button = screen.queryByRole("button", { name: tr.signUp });
       expect(signUp).toBeInTheDocument();
       expect(username).toBeInTheDocument();
       expect(email).toBeInTheDocument();

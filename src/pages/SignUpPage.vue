@@ -54,6 +54,7 @@
       Please check your e-mail to activate your account
     </div>
   </div>
+  <span title="Türkçe" @click="$i18n.locale = 'tr'">TR</span>
 </template>
 
 <script>
