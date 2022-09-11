@@ -5,6 +5,7 @@ import { render, screen, waitFor } from "@testing-library/vue";
 import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import i18n from "../locales/i18n";
+import en from "../locales/en.json";
 describe("Sign Up Page", () => {
   describe("Layout", () => {
     const setup = () => {
@@ -240,5 +241,29 @@ describe("Sign Up Page", () => {
         expect(text).not.toBeInTheDocument();
       }
     );
+  });
+  describe("Internationalization", () => {
+    const setup = () => {
+      render(SignUpPage, {
+        global: {
+          plugins: [i18n],
+        },
+      });
+    };
+    it("intially displays all text in English", () => {
+      setup();
+      const signUp = screen.queryByRole("heading", { name: en.signUp });
+      const username = screen.queryByLabelText(en.username);
+      const email = screen.queryByLabelText(en.email);
+      const password = screen.queryByLabelText(en.password);
+      const passwordRepeat = screen.queryByLabelText(en.passwordRepeat);
+      const button = screen.queryByRole("button", { name: en.signUp });
+      expect(signUp).toBeInTheDocument();
+      expect(username).toBeInTheDocument();
+      expect(email).toBeInTheDocument();
+      expect(password).toBeInTheDocument();
+      expect(passwordRepeat).toBeInTheDocument();
+      expect(button).toBeInTheDocument();
+    });
   });
 });
