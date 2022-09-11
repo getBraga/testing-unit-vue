@@ -7,6 +7,7 @@ import userEvent from "@testing-library/user-event";
 import i18n from "../locales/i18n";
 import en from "../locales/en.json";
 import tr from "../locales/tr.json";
+import ptBR from "../locales/ptBR.json";
 describe("Sign Up Page", () => {
   describe("Layout", () => {
     const setup = () => {
@@ -296,6 +297,25 @@ describe("Sign Up Page", () => {
       const password = screen.queryByLabelText(en.password);
       const passwordRepeat = screen.queryByLabelText(en.passwordRepeat);
       const button = screen.queryByRole("button", { name: en.signUp });
+      expect(signUp).toBeInTheDocument();
+      expect(username).toBeInTheDocument();
+      expect(email).toBeInTheDocument();
+      expect(password).toBeInTheDocument();
+      expect(passwordRepeat).toBeInTheDocument();
+      expect(button).toBeInTheDocument();
+    });
+    it("displays all text in Portuguese after page is translated to turkish", async () => {
+      setup();
+      const turkish = screen.queryByTitle("Türkçe");
+      await userEvent.click(turkish);
+      const english = screen.queryByTitle("Portuguese");
+      await userEvent.click(english);
+      const signUp = screen.queryByRole("heading", { name: ptBR.signUp });
+      const username = screen.queryByLabelText(ptBR.username);
+      const email = screen.queryByLabelText(ptBR.email);
+      const password = screen.queryByLabelText(ptBR.password);
+      const passwordRepeat = screen.queryByLabelText(ptBR.passwordRepeat);
+      const button = screen.queryByRole("button", { name: ptBR.signUp });
       expect(signUp).toBeInTheDocument();
       expect(username).toBeInTheDocument();
       expect(email).toBeInTheDocument();
