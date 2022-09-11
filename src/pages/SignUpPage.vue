@@ -54,7 +54,9 @@
       Please check your e-mail to activate your account
     </div>
   </div>
-  <span title="Türkçe" @click="$i18n.locale = 'tr'">TR</span>
+
+  <img src="../img/tr.png" @click="$i18n.locale = 'tr'" title="Türkçe" />
+  <img src="../img/en.png" @click="$i18n.locale = 'en'" title="English" />
 </template>
 
 <script>
@@ -125,4 +127,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+img {
+  cursor: pointer;
+}
+</style>

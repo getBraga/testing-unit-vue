@@ -283,5 +283,25 @@ describe("Sign Up Page", () => {
       expect(passwordRepeat).toBeInTheDocument();
       expect(button).toBeInTheDocument();
     });
+
+    it("displays all text in English after page is translated to turkish", async () => {
+      setup();
+      const turkish = screen.queryByTitle("Türkçe");
+      await userEvent.click(turkish);
+      const english = screen.queryByTitle("English");
+      await userEvent.click(english);
+      const signUp = screen.queryByRole("heading", { name: en.signUp });
+      const username = screen.queryByLabelText(en.username);
+      const email = screen.queryByLabelText(en.email);
+      const password = screen.queryByLabelText(en.password);
+      const passwordRepeat = screen.queryByLabelText(en.passwordRepeat);
+      const button = screen.queryByRole("button", { name: en.signUp });
+      expect(signUp).toBeInTheDocument();
+      expect(username).toBeInTheDocument();
+      expect(email).toBeInTheDocument();
+      expect(password).toBeInTheDocument();
+      expect(passwordRepeat).toBeInTheDocument();
+      expect(button).toBeInTheDocument();
+    });
   });
 });
