@@ -54,14 +54,6 @@
       Please check your e-mail to activate your account
     </div>
   </div>
-
-  <img src="../img/tr.png" @click="$i18n.locale = 'tr'" title="Türkçe" />
-  <img src="../img/en.png" @click="$i18n.locale = 'en'" title="English" />
-  <img
-    src="../img/ptBR.png"
-    @click="$i18n.locale = 'ptBR'"
-    title="Portuguese"
-  />
 </template>
 
 <script>
@@ -131,9 +123,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-img {
-  cursor: pointer;
-}
-</style>

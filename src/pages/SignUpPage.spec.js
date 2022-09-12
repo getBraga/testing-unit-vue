@@ -8,6 +8,7 @@ import i18n from "../locales/i18n";
 import en from "../locales/en.json";
 import tr from "../locales/tr.json";
 import ptBR from "../locales/ptBR.json";
+import LanguageSelector from "../components/LanguageSelector.vue";
 describe("Sign Up Page", () => {
   describe("Layout", () => {
     const setup = () => {
@@ -245,13 +246,27 @@ describe("Sign Up Page", () => {
     );
   });
   describe("Internationalization", () => {
+    let turkishLanguage, englishLanguage, portugeseBRLanguage;
     const setup = () => {
-      render(SignUpPage, {
+      const app = {
+        components: {
+          SignUpPage,
+          LanguageSelector,
+        },
+        template: `<SignUpPage/>
+        <LanguageSelector />
+        `,
+      };
+      render(app, {
         global: {
           plugins: [i18n],
         },
       });
+      turkishLanguage = screen.queryByTitle("Türkçe");
+      englishLanguage = screen.queryByTitle("English");
+      portugeseBRLanguage = screen.queryByTitle("Portuguese");
     };
+    afterEach(() => (i18n.global.locale = "en"));
     it("intially displays all text in English", () => {
       setup();
       const signUp = screen.queryByRole("heading", { name: en.signUp });
@@ -269,8 +284,8 @@ describe("Sign Up Page", () => {
     });
     it("displays all text in Turkish after selecting that language", async () => {
       setup();
-      const turkish = screen.queryByTitle("Türkçe");
-      await userEvent.click(turkish);
+
+      await userEvent.click(turkishLanguage);
       const signUp = screen.queryByRole("heading", { name: tr.signUp });
       const username = screen.queryByLabelText(tr.username);
       const email = screen.queryByLabelText(tr.email);
@@ -287,10 +302,8 @@ describe("Sign Up Page", () => {
 
     it("displays all text in English after page is translated to turkish", async () => {
       setup();
-      const turkish = screen.queryByTitle("Türkçe");
-      await userEvent.click(turkish);
-      const english = screen.queryByTitle("English");
-      await userEvent.click(english);
+      await userEvent.click(turkishLanguage);
+      await userEvent.click(englishLanguage);
       const signUp = screen.queryByRole("heading", { name: en.signUp });
       const username = screen.queryByLabelText(en.username);
       const email = screen.queryByLabelText(en.email);
@@ -306,10 +319,9 @@ describe("Sign Up Page", () => {
     });
     it("displays all text in Portuguese after page is translated to turkish", async () => {
       setup();
-      const turkish = screen.queryByTitle("Türkçe");
-      await userEvent.click(turkish);
-      const english = screen.queryByTitle("Portuguese");
-      await userEvent.click(english);
+
+      await userEvent.click(turkishLanguage);
+      await userEvent.click(portugeseBRLanguage);
       const signUp = screen.queryByRole("heading", { name: ptBR.signUp });
       const username = screen.queryByLabelText(ptBR.username);
       const email = screen.queryByLabelText(ptBR.email);
