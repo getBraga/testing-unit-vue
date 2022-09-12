@@ -3,5 +3,6 @@
   "username": "Node de usuário",
   "email": "E-mail",
   "password": "Senha",
-  "passwordRepeat": "Repetir Senha"
+  "passwordRepeat": "Repetir Senha",
+  "passwordMismatchValidation": "Senhas diferentes"
 }

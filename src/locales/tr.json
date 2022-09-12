@@ -3,5 +3,6 @@
   "username": "Kullanıcı adı",
   "email": "E-posta",
   "password": "Şifre",
-  "passwordRepeat": "Şifreleri tekrarlamaya"
+  "passwordRepeat": "Şifreleri tekrarlamaya",
+  "passwordMismatchValidation": "Şifre eşleşmiyor"
 }
