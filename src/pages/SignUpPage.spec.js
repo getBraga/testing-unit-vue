@@ -9,6 +9,23 @@ import en from "../locales/en.json";
 import tr from "../locales/tr.json";
 import ptBR from "../locales/ptBR.json";
 import LanguageSelector from "../components/LanguageSelector.vue";
+let requestBody;
+let count = 0;
+let acceptLanguageHeader;
+const server = setupServer(
+  rest.post("/api/1.0/users", async (req, res, ctx) => {
+    count += 1;
+    acceptLanguageHeader = req.headers.get("Accept-Language");
+    requestBody = await req.json();
+    return res(ctx.status(200));
+  })
+);
+beforeAll(() => server.listen());
+beforeEach(() => {
+  count = 0;
+  server.resetHandlers();
+});
+afterAll(() => server.close());
 describe("Sign Up Page", () => {
   describe("Layout", () => {
     const setup = () => {
@@ -66,22 +83,8 @@ describe("Sign Up Page", () => {
     });
   });
   describe("Interactions", () => {
-    let button, requestBody, passwordInput, passwordInutRepeat, usernameInput;
-    let count = 0;
-    const server = setupServer(
-      rest.post("/api/1.0/users", async (req, res, ctx) => {
-        count += 1;
-        requestBody = await req.json();
-        return res(ctx.status(200));
-      })
-    );
+    let button, passwordInput, passwordInutRepeat, usernameInput;
 
-    beforeAll(() => server.listen());
-    beforeEach(() => {
-      count = 0;
-      server.resetHandlers();
-    });
-    afterAll(() => server.close());
     const setup = async () => {
       render(SignUpPage, {
         global: {
@@ -158,11 +161,6 @@ describe("Sign Up Page", () => {
       expect(text).toBeInTheDocument();
     });
     it("does not display account activation message before sign up request", async () => {
-      server.use(
-        rest.post("/api/1.0/users", async (req, res, ctx) => {
-          return res(ctx.status(400));
-        })
-      );
       await setup();
       userEvent.click(button);
       const text = screen.queryByText(
@@ -171,14 +169,19 @@ describe("Sign Up Page", () => {
 
       expect(text).not.toBeInTheDocument();
     });
+
     it("does not displays account activation information after failing sign up", async () => {
+      server.use(generateValidationError());
       await setup();
+
       await userEvent.click(button);
       const text = screen.queryByText(
         "Please check your e-mail to activate your account"
       );
+
       expect(text).not.toBeInTheDocument();
     });
+
     it("hides sign up form after successful sign up request", async () => {
       await setup();
       const form = screen.queryByTestId("form-sign-up");
@@ -248,8 +251,11 @@ describe("Sign Up Page", () => {
   describe("Internationalization", () => {
     let turkishLanguage,
       englishLanguage,
+      username,
+      email,
       portugeseBRLanguage,
       password,
+      button,
       passwordRepeat;
     const setup = () => {
       const app = {
@@ -269,8 +275,11 @@ describe("Sign Up Page", () => {
       turkishLanguage = screen.queryByTitle("Türkçe");
       englishLanguage = screen.queryByTitle("English");
       portugeseBRLanguage = screen.queryByTitle("Portuguese");
+      username = screen.queryByLabelText(en.username);
+      email = screen.queryByLabelText(en.email);
       password = screen.queryByLabelText(en.password);
       passwordRepeat = screen.queryByLabelText(en.passwordRepeat);
+      button = screen.queryByRole("button", { name: en.signUp });
     };
     afterEach(() => (i18n.global.locale = "en"));
     it("intially displays all text in English", () => {
@@ -348,6 +357,45 @@ describe("Sign Up Page", () => {
       await userEvent.type(passwordRepeat, "N3wP4ss");
       const validation = screen.queryByText(tr.passwordMismatchValidation);
       expect(validation).toBeInTheDocument();
+    });
+    it("sends accept-language having en to backend for sign up request", async () => {
+      setup();
+      await userEvent.type(username, "user1");
+      await userEvent.type(email, "user@mail.com");
+      await userEvent.type(password, "P4ssword");
+      await userEvent.type(passwordRepeat, "P4ssword");
+      await userEvent.click(button);
+      await screen.findByText(
+        "Please check your e-mail to activate your account"
+      );
+      expect(acceptLanguageHeader).toBe("en");
+    });
+    it("sends accept-language having tr after that language is selected", async () => {
+      setup();
+      await userEvent.click(turkishLanguage);
+      await userEvent.type(username, "user1");
+      await userEvent.type(email, "user@mail.com");
+      await userEvent.type(password, "P4ssword");
+      await userEvent.type(passwordRepeat, "P4ssword");
+      await userEvent.click(button);
+      await screen.findByText(tr.accountActivationNotification);
+
+      waitFor(() => {
+        expect(acceptLanguageHeader).toBe("tr");
+      });
+    });
+    it("displays account activation information in Turkish after selecting that language", async () => {
+      setup();
+      await userEvent.click(turkishLanguage);
+      await userEvent.type(username, "user1");
+      await userEvent.type(email, "user@mail.com");
+      await userEvent.type(password, "P4ssword");
+      await userEvent.type(passwordRepeat, "P4ssword");
+      await userEvent.click(button);
+      const accountActivate = await screen.findByText(
+        tr.accountActivationNotification
+      );
+      expect(accountActivate).toBeInTheDocument();
     });
   });
 });

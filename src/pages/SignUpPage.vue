@@ -51,13 +51,13 @@
       </div>
     </form>
     <div v-else class="alert alert-success mt-2">
-      Please check your e-mail to activate your account
+      {{ $t("accountActivationNotification") }}
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import { signUp } from "../api/apiCalls";
 import Input from "./../components/Input.vue";
 export default {
   components: {
@@ -74,6 +74,9 @@ export default {
       errors: {},
     };
   },
+  // created() {
+  //   this.locale = this.$i18n.locale;
+  // },
   computed: {
     btnDisabled() {
       return this.password.length && this.passwordRepeat.length
@@ -82,6 +85,9 @@ export default {
     },
     hasPasswordMismatch() {
       return this.password !== this.passwordRepeat;
+    },
+    locale() {
+      return this.$i18n.locale;
     },
   },
   watch: {
@@ -96,15 +102,14 @@ export default {
     },
   },
   methods: {
-    submit() {
+    async submit() {
       this.apiProgress = true;
-      axios
-        .post("/api/1.0/users", {
-          username: this.username,
-          email: this.email,
-          password: this.password,
-        })
 
+      signUp({
+        username: this.username,
+        email: this.email,
+        password: this.password,
+      })
         .then(() => {
           setTimeout(() => {
             this.signUpSuccess = true;
