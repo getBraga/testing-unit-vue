@@ -74,9 +74,7 @@ export default {
       errors: {},
     };
   },
-  // created() {
-  //   this.locale = this.$i18n.locale;
-  // },
+
   computed: {
     btnDisabled() {
       return this.password.length && this.passwordRepeat.length
@@ -104,23 +102,19 @@ export default {
   methods: {
     async submit() {
       this.apiProgress = true;
-
-      signUp({
-        username: this.username,
-        email: this.email,
-        password: this.password,
-      })
-        .then(() => {
-          setTimeout(() => {
-            this.signUpSuccess = true;
-          }, 0);
-        })
-        .catch((error) => {
-          if (error.response.status === 400) {
-            this.errors = error.response.data.validationErrors;
-          }
-          this.apiProgress = false;
+      try {
+        await signUp({
+          username: this.username,
+          email: this.email,
+          password: this.password,
         });
+        this.signUpSuccess = true;
+      } catch (error) {
+        if (error.response.status === 400) {
+          this.errors = error.response.data.validationErrors;
+        }
+        this.apiProgress = false;
+      }
     },
     onChange(value) {
       this.username = value;
