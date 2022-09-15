@@ -141,11 +141,13 @@ describe("Sign Up Page", () => {
       expect(count).toBe(1);
     });
     it("displays spinner while the api request in progress", async () => {
+      let spinner;
       await setup();
-      await userEvent.click(button);
-      const spinner = screen.queryByRole("status");
-
-      expect(spinner).toBeInTheDocument();
+      await waitFor(() => {
+        userEvent.click(button);
+        spinner = screen.queryByRole("status");
+        expect(spinner).toBeInTheDocument();
+      });
     });
     it("does not display spinner when there is no api request", async () => {
       await setup();
@@ -173,7 +175,6 @@ describe("Sign Up Page", () => {
     it("does not displays account activation information after failing sign up", async () => {
       server.use(generateValidationError());
       await setup();
-
       await userEvent.click(button);
       const text = screen.queryByText(
         "Please check your e-mail to activate your account"
