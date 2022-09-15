@@ -175,7 +175,6 @@ describe("Sign Up Page", () => {
     it("does not displays account activation information after failing sign up", async () => {
       server.use(generateValidationError());
       await setup();
-
       await userEvent.click(button);
       const text = screen.queryByText(
         "Please check your e-mail to activate your account"
