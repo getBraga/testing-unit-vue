@@ -3,6 +3,7 @@
     <HomePage v-if="path === '/'" />
     <SignUpPage v-else-if="path === '/signup'" />
     <LoginPage v-else-if="path === '/login'" />
+    <UserPage v-else-if="path.startsWith('/user/')" />
     <LanguageSelector />
   </div>
 </template>
@@ -11,6 +12,7 @@
 import SignUpPage from "./pages/SignUpPage.vue";
 import HomePage from "./pages/HomePage.vue";
 import LoginPage from "./pages/LoginPage.vue";
+import UserPage from "./pages/UserPage.vue";
 import LanguageSelector from "./components/LanguageSelector.vue";
 export default {
   name: "App",
@@ -19,6 +21,7 @@ export default {
     LanguageSelector,
     HomePage,
     LoginPage,
+    UserPage,
   },
   computed: {
     path() {
