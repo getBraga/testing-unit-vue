@@ -62,6 +62,9 @@
       ".*\\.(js)$": "babel-jest",
       ".+\\.(css|scss|png|jpg|svg)$": "jest-transform-stub"
     },
+    "setupFilesAfterEnv": [
+      "./test/setupTest.js"
+    ],
     "testEnvironment": "jsdom"
   }
 }

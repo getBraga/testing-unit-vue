@@ -2,7 +2,6 @@ import SignUpPage from "./SignUpPage.vue";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import { render, screen, waitFor } from "@testing-library/vue";
-import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import i18n from "../locales/i18n";
 import en from "../locales/en.json";
@@ -282,7 +281,6 @@ describe("Sign Up Page", () => {
       passwordRepeat = screen.queryByLabelText(en.passwordRepeat);
       button = screen.queryByRole("button", { name: en.signUp });
     };
-    afterEach(() => (i18n.global.locale = "en"));
     it("intially displays all text in English", () => {
       setup();
       const signUp = screen.queryByRole("heading", { name: en.signUp });

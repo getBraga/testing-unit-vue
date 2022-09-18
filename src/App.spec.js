@@ -1,9 +1,14 @@
 import { render, screen } from "@testing-library/vue";
 import App from "./App.vue";
-import "@testing-library/jest-dom";
 import i18n from "./locales/i18n";
 
 describe("Routing", () => {
+  const setup = (path) => {
+    window.history.pushState({}, "", path);
+    render(App, {
+      global: { plugins: [i18n] },
+    });
+  };
   it.each`
     path         | pageTestId
     ${"/"}       | ${"home-page"}
@@ -12,11 +17,7 @@ describe("Routing", () => {
     ${"/user/1"} | ${"user-page"}
     ${"/user/2"} | ${"user-page"}
   `("displays $pageTestId when is at $path", ({ path, pageTestId }) => {
-    window.history.pushState({}, "", path);
-    render(App, {
-      global: { plugins: [i18n] },
-    });
-
+    setup(path);
     const page = screen.queryByTestId(pageTestId);
     expect(page).toBeInTheDocument();
   });
@@ -36,10 +37,7 @@ describe("Routing", () => {
     ${"/user/1"} | ${"signup-page"}
     ${"/user/1"} | ${"login-page"}
   `("does not display $pageTestId when is at $path", ({ path, pageTestId }) => {
-    window.history.pushState({}, "", path);
-    render(App, {
-      global: { plugins: [i18n] },
-    });
+    setup(path);
 
     const page = screen.queryByTestId(pageTestId);
     expect(page).not.toBeInTheDocument();
